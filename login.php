@@ -12,7 +12,6 @@ if(!isset($_SESSION['user'])){
         $flag = true;
         while($row = mysqli_fetch_assoc($result)){
             $hash = hash('sha512', $row['salt']. $_POST['pass']);
-            echo $hash;
             if($hash == $row['password']){
                 $_SESSION['user'] = $row['username'];
                 $flag = false;
