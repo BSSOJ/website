@@ -23,7 +23,7 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
         </form>
         <?php
         }else{
-            echo "You are logged in as, ". $user;
+            echo "You are logged in as, ". $user. " <a href=\"logout.php\">Logout</a>";
         }
         ?>
     </body>
