@@ -6,7 +6,7 @@ $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 
 $problems = [];
 $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
-$result = mysqli_query($link, "SELECT name, code, SUM(testcases.score) AS score FROM problems JOIN testcases WHERE testcases.probid=problems.id GROUP BY problems.id");
+$result = mysqli_query($link, "SELECT ProblemName, ProblemCode, ProblemValue FROM problems");
 $i = 0;
 while($row = mysqli_fetch_assoc($result)){
     $problems[$i++] = $row;
@@ -43,9 +43,9 @@ while($row = mysqli_fetch_assoc($result)){
             <?php
             foreach($problems as $problem){
                 echo "<tr>";
-                echo "<td>". $problem['name']. "</td>";
-                echo "<td>". $problem['code']. "</td>";
-                echo "<td>". $problem['score']. "</td>";
+                echo "<td>". $problem['ProblemName']. "</td>";
+                echo "<td>". $problem['ProblemCode']. "</td>";
+                echo "<td>". $problem['ProblemValue']. "</td>";
                 echo "</tr>";
             }
             ?>
