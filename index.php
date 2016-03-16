@@ -7,6 +7,8 @@ $error = isset($_SESSION['error']) ? $_SESSION['error'] : null;
 $page = 0;
 if(isset($_GET['login'])){
     $page = 1;
+}else if(isset($_GET['problem'])){
+    $page = 2;
 }
 
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -44,7 +46,23 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         </nav>
         <div class="container">
             <?php
-            if($page == 1){
+            if($page == 2){
+                $problem = mysqli_real_escape_string($link, $_GET['problem']);
+                $result = mysqli_query($link, "SELECT ProblemName, ProblemCode, ProblemValue, ProblemDescription FROM problems WHERE ProblemCode='". $problem. "'");
+                echo mysqli_error($link);
+                if($row = mysqli_fetch_assoc($result)){
+            ?>
+            <h1><?= $row['ProblemName']?></h1>
+            Problem code: <?= $row['ProblemCode']?>.<br>
+            Problem value: <?= $row['ProblemValue']?>
+            <p>
+                <?= $row['ProblemDescription']?>
+            </p>
+            <?php
+                }else{
+                    echo "No such problem";
+                }
+            }else if($page == 1){
                 if($error != null){
                     echo $error;
                 }
@@ -65,7 +83,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                 $result = mysqli_query($link, "SELECT ProblemName, ProblemCode, ProblemValue FROM problems");
                 while($row = mysqli_fetch_assoc($result)){
                     echo "<tr>";
-                    echo "<td>". $row['ProblemName']. "</td>";
+                    echo "<td><a href=\"?problem=". $row['ProblemCode']. "\">". $row['ProblemName']. "</a></td>";
                     echo "<td>". $row['ProblemCode']. "</td>";
                     echo "<td>". $row['ProblemValue']. "</td>";
                     echo "</tr>";
@@ -83,3 +101,4 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
 <?php
 unset($_SESSION['error']);
 ?>
+
