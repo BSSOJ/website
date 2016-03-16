@@ -2,6 +2,8 @@
 session_start();
 require_once("config.php");
 
+$error = isset($_SESSION['error']) ? $_SESSION['error'] : null;
+
 $page = 0;
 if(isset($_GET['login'])){
     $page = 1;
@@ -43,8 +45,8 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         <div class="container">
             <?php
             if($page == 1){
-                if(isset($_SESSION['error'])){
-                    echo  $_SESSION['error'];
+                if($error != null){
+                    echo $error;
                 }
             ?>
             <form action="login.php" method="POST">
