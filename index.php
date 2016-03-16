@@ -2,6 +2,11 @@
 session_start();
 require_once("config.php");
 
+$page = 0;
+if(isset($_GET['login'])){
+    $page = 1;
+}
+
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
 $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
 ?>
@@ -27,7 +32,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                 </div>
                 <div id="navbar" class="collapse navbar-collapse">
                     <ul class="nav navbar-nav">
-                        <li class="active"><a href="?">Problems</a></li>
+                        <li <?= $page == 0 ? "class=\"active\"" : ""?>><a href="?">Problems</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li><?= $user == null ? "<a href=\"?login\">Login</a>" : "<a href=\"logout.php\">Logout (".  $user. ")</a>"?></li>
@@ -37,13 +42,17 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         </nav>
         <div class="container">
             <?php
-            if(isset($_SESSION['error'])){
-                echo  $_SESSION['error'];
-            }
+            if($page == 1){
+                if(isset($_SESSION['error'])){
+                    echo  $_SESSION['error'];
+                }
             ?>
             <form action="login.php" method="POST">
                 <input type="text" name="user" placeholder="Username"><input type="password" name="pass" placeholder="Password"><input type="submit">
             </form>
+            <?php
+            }else if($page == 0){
+            ?>
             <table class="table">
                 <tr>
                     <th class="col-xs-10">Name</th>
@@ -60,7 +69,10 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                     echo "</tr>";
                 }
                 ?>
-        </table>
+            </table>
+            <?php
+            }
+            ?>
         </div>
         <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
         <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.6/js/bootstrap.min.js" integrity="sha384-0mSbJDEHialfmuBBQP6A4Qrprq5OVfW37PRR3j5ELqxss1yVqOtnepnHVP9aJ7xS" crossorigin="anonymous"></script>
