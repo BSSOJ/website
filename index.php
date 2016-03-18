@@ -8,6 +8,7 @@ $page = 0;
 if(isset($_GET['login'])){
     $page = 1;
 }else if(isset($_GET['problem'])){
+    require('lib/Parsedown.php');
     $page = 2;
 }
 
@@ -56,7 +57,11 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             Problem code: <?= $row['ProblemCode']?>.<br>
             Problem value: <?= $row['ProblemValue']?>
             <p>
-                <?= $row['ProblemDescription']?>
+                <?php
+                $desc = $row['ProblemDescription'];
+                $Parsedown = new Parsedown();
+                echo $Parsedown->text($desc);
+                ?>
             </p>
             <?php
                 }else{
