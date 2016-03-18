@@ -73,7 +73,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                 }
             }else if($page == 1){
                 if($error != null){
-                    echo $error;
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">". $error. "</div>";
                 }
             ?>
             <form action="login.php" method="POST">
