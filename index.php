@@ -79,11 +79,11 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             <form action="login.php" method="POST">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Username/Email address</label>
-                    <input type="text" class="form-control" name="user" placeholder="Username/Email">
+                    <input type="text" class="form-control" name="user" placeholder="Username/Email" required>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputPassword1">Password</label>
-                    <input type="password" class="form-control" name="pass" placeholder="Password">
+                    <input type="password" class="form-control" name="pass" placeholder="Password" required>
                 </div>
                 <div class="checkbox">
                     <label>
