@@ -54,15 +54,19 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                 if($row = mysqli_fetch_assoc($result)){
             ?>
             <h1><?= $row['ProblemName']?></h1>
-            Problem code: <?= $row['ProblemCode']?>.<br>
-            Problem value: <?= $row['ProblemValue']?>
-            <p>
-                <?php
-                $desc = $row['ProblemDescription'];
-                $Parsedown = new Parsedown();
-                echo $Parsedown->text($desc);
-                ?>
-            </p>
+            <div class="col-md-2 col-md-push-10">
+                Problem code: <?= $row['ProblemCode']?>.<br>
+                Problem value: <?= $row['ProblemValue']?>
+            </div>
+            <div class="col-md-10 col-md-pull-2">
+                <p>
+                    <?php
+                    $desc = $row['ProblemDescription'];
+                    $Parsedown = new Parsedown();
+                    echo $Parsedown->text($desc);
+                    ?>
+                </p>
+            </div>
             <?php
                 }else{
                     echo "No such problem";
