@@ -14,6 +14,9 @@ if(!isset($_SESSION['user'])){
             if(password_verify($_POST['pass'], $row['PasswordHash'])){
                 $_SESSION['user'] = $row['Username'];
                 $flag = false;
+
+                header("Location: index.php");
+                exit;
             }
         }
         if($flag){
@@ -24,4 +27,4 @@ if(!isset($_SESSION['user'])){
         $_SESSION['error'] = "You must enter your username and password to login";
     }
 }
-header("Location: .");
+header("Location: index.php?login");

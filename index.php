@@ -77,7 +77,20 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                 }
             ?>
             <form action="login.php" method="POST">
-                <input type="text" name="user" placeholder="Username"><input type="password" name="pass" placeholder="Password"><input type="submit">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Username/Email address</label>
+                    <input type="text" class="form-control" name="user" placeholder="Username/Email">
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputPassword1">Password</label>
+                    <input type="password" class="form-control" name="pass" placeholder="Password">
+                </div>
+                <div class="checkbox">
+                    <label>
+                        <input type="checkbox"> Remember me
+                    </label>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
             </form>
             <?php
             }else if($page == 0){
