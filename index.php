@@ -55,6 +55,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             ?>
             <h1><?= $row['ProblemName']?></h1>
             <div class="col-md-2 col-md-push-10">
+                <a href="?submit" class="btn btn-primary">Submit Solution</button>
                 Problem code: <?= $row['ProblemCode']?>.<br>
                 Problem value: <?= $row['ProblemValue']?>
             </div>
