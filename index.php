@@ -10,6 +10,8 @@ if(isset($_GET['login'])){
 }else if(isset($_GET['problem'])){
     require('lib/Parsedown.php');
     $page = 2;
+}else if(isset($_GET['submit'])){
+    $page = 3;
 }
 
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -47,7 +49,31 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         </nav>
         <div class="container">
             <?php
-            if($page == 2){
+            if($page == 3){
+            ?>
+            <form action="submit.php" method="POST">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Problem Code</label>
+                    <input type="text" class="form-control" id="problem" placeholder="Problem code"<?= $_GET['submit'] != "" ? " value=\"". $_GET['submit']. "\"" : ""?>>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Problem Source</label>
+                    <textarea class="form-control" id="source" rows="20" placeholder="Problem source"></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Language</label>
+                    <select name="language" class="form-control">
+                        <?php
+                        foreach($config['languages'] as $code => $name){
+                            echo "<option value=\"". $code. "\">". $name. "</option>";
+                        }
+                        ?>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-default">Submit</button>
+            </form>
+            <?php
+            }else if($page == 2){
                 $problem = mysqli_real_escape_string($link, $_GET['problem']);
                 $result = mysqli_query($link, "SELECT ProblemName, ProblemCode, ProblemValue, ProblemDescription FROM problems WHERE ProblemCode='". $problem. "'");
                 echo mysqli_error($link);
@@ -55,7 +81,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             ?>
             <h1><?= $row['ProblemName']?></h1>
             <div class="col-md-2 col-md-push-10">
-                <a href="?submit" class="btn btn-primary btn-submit">Submit Solution</a>
+                <a href="?submit=<?= $row['ProblemCode']?>" class="btn btn-primary btn-submit">Submit Solution</a>
                 Problem code: <?= $row['ProblemCode']?>.<br>
                 Problem value: <?= $row['ProblemValue']?>
             </div>

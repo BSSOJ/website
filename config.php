@@ -6,3 +6,7 @@ $config['db']['pass'] = "password";
 $config['db']['name'] = "judge";
 
 $config['site']['title'] = "Judge";
+
+$config['languages']['cpp11'] = "C++11"; 
+$config['languages']['cpp'] = "C++"; 
+$config['languages']['java'] = "Java"; 
