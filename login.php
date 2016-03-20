@@ -7,11 +7,12 @@ if(!isset($_SESSION['user'])){
         $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db']['pass'], $config['db']['name'], $config['db']['port']);
         $user = mysqli_real_escape_string($link, $_POST['user']);
 
-        $result = mysqli_query($link, "SELECT Username, PasswordHash FROM users WHERE Username='". $user. "' OR EmailAddress='". $user. "'");
+        $result = mysqli_query($link, "SELECT UserID, Username, PasswordHash FROM users WHERE Username='". $user. "' OR EmailAddress='". $user. "'");
 
         $flag = true;
         while($row = mysqli_fetch_assoc($result)){
             if(password_verify($_POST['pass'], $row['PasswordHash'])){
+                $_SESSION['userid'] = $row['UserID'];
                 $_SESSION['user'] = $row['Username'];
                 $flag = false;
 

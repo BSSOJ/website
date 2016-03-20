@@ -50,15 +50,18 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         <div class="container">
             <?php
             if($page == 3){
+                if($error != null){
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">". $error. "</div>";
+                }
             ?>
             <form action="submit.php" method="POST">
                 <div class="form-group">
                     <label for="exampleInputEmail1">Problem Code</label>
-                    <input type="text" class="form-control" id="problem" placeholder="Problem code"<?= $_GET['submit'] != "" ? " value=\"". $_GET['submit']. "\"" : ""?>>
+                    <input type="text" class="form-control" name="problem" placeholder="Problem code"<?= $_GET['submit'] != "" ? " value=\"". $_GET['submit']. "\"" : ""?>>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Problem Source</label>
-                    <textarea class="form-control" id="source" rows="20" placeholder="Problem source"></textarea>
+                    <textarea class="form-control" name="source" rows="20" placeholder="Problem source"></textarea>
                 </div>
                 <div class="form-group">
                     <label for="exampleInputEmail1">Language</label>
