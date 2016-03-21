@@ -86,7 +86,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             <h1><?= $row['ProblemName']?></h1>
             <div class="col-md-2 col-md-push-10">
                 <a href="?submit=<?= $row['ProblemCode']?>" class="btn btn-primary btn-submit">Submit Solution</a>
-                Problem code: <?= $row['ProblemCode']?>.<br>
+                Problem code: <?= $row['ProblemCode']?><br>
                 Problem value: <?= $row['ProblemValue']?>
             </div>
             <div class="col-md-10 col-md-pull-2">
