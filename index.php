@@ -74,7 +74,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                         ?>
                     </select>
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-primary">Submit</button>
             </form>
             <?php
             }else if($page == 2){
