@@ -43,7 +43,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                         <li <?= $page == 3 ? "class=\"active\"" : ""?>><a href="?submit">Submit</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
-                        <li><?= $user == null ? "<a href=\"?login\">Login</a>" : "<a href=\"logout.php\">Logout (".  $user. ")</a>"?></li>
+                        <li <?= $page == 1 ? "class=\"active\"" : ""?>><?= $user == null ? "<a href=\"?login\">Login</a>" : "<a href=\"logout.php\">Logout (".  $user. ")</a>"?></li>
                     </ul>
                 </div>
             </div>
