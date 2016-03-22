@@ -14,6 +14,8 @@ if(isset($_GET['login'])){
     $page = 3;
 }else if(isset($_GET['submissions'])){
     $page = 4;
+}else if(isset($_GET['viewsubmission'])){
+    $page = 5;
 }
 
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -53,8 +55,46 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         </nav>
         <div class="container">
             <?php
-            if($page == 4){
-                $result = mysqli_query($link, "SELECT submissions.SubmissionDate, users.Username, problems.ProblemName, CASE WHEN submissions.SubmissionStatus =  'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status', submissions.PointsEarnt, problems.ProblemCode FROM submissions JOIN users, problems WHERE users.UserID = submissions.UserID AND submissions.ProblemID=problems.ProblemID ORDER BY submissions.SubmissionDate DESC");
+            if($page == 5){
+                if(!isset($_SESSION['user'])){
+                    echo "<div class=\"alert alert-danger\" role=\"alert\">You must be logged in to do that</div>";
+                    
+                }else{
+                    $id = mysqli_real_escape_string($link, $_GET['viewsubmission']);
+                    $result = mysqli_query($link, "SELECT problems.ProblemName, problems.ProblemCode, problems.ProblemValue, problems.ProblemDescription, submissions.SubmissionDate, submissions.SourceCode, submissions.PointsEarnt, CASE WHEN submissions.SubmissionStatus = 'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status' FROM submissions JOIN problems WHERE problems.ProblemID = submissions.ProblemID AND submissions.SubmissionID='". $id. "' AND submissions.UserID=". $_SESSION['userid']);
+                    
+                    if($row = mysqli_fetch_assoc($result)){
+                        $status = $row['status'];
+                        if($status == "PEND"){
+                            $status = "Pending";
+                        }else if($status == "PROG"){
+                            $status = "Judging";
+                        }
+            ?>
+            <h1>Submission</h1>
+            <div class="col-md-3 col-md-push-9">
+                Problem code: <?= $row['ProblemCode']?><br>
+                Problem value: <?= $row['ProblemValue']?><br><br>
+                Submission date: <?= $row['SubmissionDate']?><br>
+                Result: <?= $status?><br>
+                Points earnt: <?= $row['PointsEarnt']?>
+            </div>
+            <div class="col-md-9 col-md-pull-3">
+                <pre><?= htmlspecialchars($row['SourceCode'])?></pre>
+                <?php
+                $result = mysqli_query($link, "SELECT judge_results.TestResult, testcases.CaseValue FROM judge_results JOIN testcases WHERE testcases.TestcaseID=judge_results.TestcaseID AND judge_results.SubmissionID=". $id);
+                while($row = mysqli_fetch_assoc($result)){
+                    echo $row['TestResult']. " - ". ($row['TestResult'] == "AC" ? $row['CaseValue'] : "0"). "/". $row['CaseValue']. "<br>";
+                }
+                ?>
+            </div>
+            <?php
+                    }else{
+                        echo "<div class=\"alert alert-danger\" role=\"alert\">Either that submission does not exist, or you do not have permission to view it</div>";
+                    }
+                }
+            }else if($page == 4){
+                $result = mysqli_query($link, "SELECT submissions.SubmissionDate, users.Username, problems.ProblemName, CASE WHEN submissions.SubmissionStatus =  'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status', submissions.PointsEarnt, problems.ProblemCode, submissions.SubmissionID FROM submissions JOIN users, problems WHERE users.UserID = submissions.UserID AND submissions.ProblemID=problems.ProblemID ORDER BY submissions.SubmissionDate DESC");
             ?>
             <table class="table">
                 <tr>
@@ -86,7 +126,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                     echo "<td>". $row['SubmissionDate']. "</td>";
                     echo "<td>". $row['Username']. "</td>";
                     echo "<td><a href=\"?problem=". $row['ProblemCode']. "\">". $row['ProblemName']. "</a></td>";
-                    echo "<td>". $status. "</td>";
+                    echo "<td><a href=\"?viewsubmission=". $row['SubmissionID']. "\">". $status. "</a></td>";
                     echo "<td>". $row['PointsEarnt']. "</td>";
                     echo "</tr>";
                 }
