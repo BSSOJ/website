@@ -58,7 +58,6 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             if($page == 5){
                 if(!isset($_SESSION['user'])){
                     echo "<div class=\"alert alert-danger\" role=\"alert\">You must be logged in to do that</div>";
-                    
                 }else{
                     $id = mysqli_real_escape_string($link, $_GET['viewsubmission']);
                     $result = mysqli_query($link, "SELECT problems.ProblemName, problems.ProblemCode, problems.ProblemValue, problems.ProblemDescription, submissions.SubmissionDate, submissions.SourceCode, submissions.PointsEarnt, CASE WHEN submissions.SubmissionStatus = 'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status' FROM submissions JOIN problems WHERE problems.ProblemID = submissions.ProblemID AND submissions.SubmissionID='". $id. "' AND submissions.UserID=". $_SESSION['userid']);
@@ -94,7 +93,8 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                     }
                 }
             }else if($page == 4){
-                $result = mysqli_query($link, "SELECT submissions.SubmissionDate, users.Username, problems.ProblemName, CASE WHEN submissions.SubmissionStatus =  'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status', submissions.PointsEarnt, problems.ProblemCode, submissions.SubmissionID FROM submissions JOIN users, problems WHERE users.UserID = submissions.UserID AND submissions.ProblemID=problems.ProblemID ORDER BY submissions.SubmissionDate DESC");
+                $id = $_GET['submissions'] != "" ? mysqli_real_escape_string($link, $_GET['submissions']) : -1;
+                $result = mysqli_query($link, "SELECT submissions.SubmissionDate, users.Username, problems.ProblemName, CASE WHEN submissions.SubmissionStatus =  'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status', submissions.PointsEarnt, problems.ProblemCode, submissions.SubmissionID FROM submissions JOIN users, problems WHERE users.UserID = submissions.UserID AND submissions.ProblemID=problems.ProblemID ". ($id != -1 ? ("AND problems.ProblemCode='". $id. "' ") : ""). "ORDER BY submissions.SubmissionDate DESC");
             ?>
             <table class="table">
                 <tr>
@@ -167,7 +167,8 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             ?>
             <h1><?= $row['ProblemName']?></h1>
             <div class="col-md-2 col-md-push-10">
-                <a href="?submit=<?= $row['ProblemCode']?>" class="btn btn-primary btn-submit">Submit Solution</a>
+                <a href="?submit=<?= $row['ProblemCode']?>" class="btn btn-primary btn-fullwidth">Submit Solution</a>
+                <a href="?submissions=<?= $row['ProblemCode']?>" class="btn btn-success btn-fullwidth">View solutions</a><br>
                 Problem code: <?= $row['ProblemCode']?><br>
                 Problem value: <?= $row['ProblemValue']?>
             </div>
