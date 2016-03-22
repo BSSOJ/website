@@ -163,7 +163,6 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
             }else if($page == 2){
                 $problem = mysqli_real_escape_string($link, $_GET['problem']);
                 $result = mysqli_query($link, "SELECT ProblemName, ProblemCode, ProblemValue, ProblemDescription FROM problems WHERE ProblemCode='". $problem. "'");
-                echo mysqli_error($link);
                 if($row = mysqli_fetch_assoc($result)){
             ?>
             <h1><?= $row['ProblemName']?></h1>
