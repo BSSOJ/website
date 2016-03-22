@@ -54,7 +54,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         <div class="container">
             <?php
             if($page == 4){
-                $result = mysqli_query($link, "SELECT submissions.SubmissionDate, users.Username, problems.ProblemName, CASE WHEN submissions.SubmissionStatus =  'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status', submissions.PointsEarnt, problems.ProblemCode FROM submissions JOIN users, problems WHERE users.UserID = submissions.UserID AND submissions.ProblemID=problems.ProblemID");
+                $result = mysqli_query($link, "SELECT submissions.SubmissionDate, users.Username, problems.ProblemName, CASE WHEN submissions.SubmissionStatus =  'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status', submissions.PointsEarnt, problems.ProblemCode FROM submissions JOIN users, problems WHERE users.UserID = submissions.UserID AND submissions.ProblemID=problems.ProblemID ORDER BY submissions.SubmissionDate DESC");
             ?>
             <table class="table">
                 <tr>
