@@ -36,4 +36,4 @@ if($row = mysqli_fetch_assoc($result)){
 $sql = "INSERT INTO submissions (ProblemID, UserID, Language, SourceCode) VALUES (". $id. ", ". $_SESSION['userid']. ", '". $_POST['language']. "', '". mysqli_real_escape_string($link, $_POST['source']). "')";
 mysqli_query($link, $sql);
 
-header("Location: index.php?problem=". $_POST['problem']);
+header("Location: index.php?submissions");
