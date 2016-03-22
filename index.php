@@ -12,6 +12,8 @@ if(isset($_GET['login'])){
     $page = 2;
 }else if(isset($_GET['submit'])){
     $page = 3;
+}else if(isset($_GET['submissions'])){
+    $page = 4;
 }
 
 $user = isset($_SESSION['user']) ? $_SESSION['user'] : null;
@@ -41,6 +43,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                     <ul class="nav navbar-nav">
                         <li <?= $page == 0 ? "class=\"active\"" : ""?>><a href="?">Problems</a></li>
                         <li <?= $page == 3 ? "class=\"active\"" : ""?>><a href="?submit">Submit</a></li>
+                        <li <?= $page == 4 ? "class=\"active\"" : ""?>><a href="?submissions">Submissions</a></li>
                     </ul>
                     <ul class="nav navbar-nav navbar-right">
                         <li <?= $page == 1 ? "class=\"active\"" : ""?>><?= $user == null ? "<a href=\"?login\">Login</a>" : "<a href=\"logout.php\">Logout (".  $user. ")</a>"?></li>
@@ -50,7 +53,47 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
         </nav>
         <div class="container">
             <?php
-            if($page == 3){
+            if($page == 4){
+                $result = mysqli_query($link, "SELECT submissions.SubmissionDate, users.Username, problems.ProblemName, CASE WHEN submissions.SubmissionStatus =  'DONE' THEN submissions.Result ELSE submissions.SubmissionStatus END AS 'status', submissions.PointsEarnt, problems.ProblemCode FROM submissions JOIN users, problems WHERE users.UserID = submissions.UserID AND submissions.ProblemID=problems.ProblemID");
+            ?>
+            <table class="table">
+                <tr>
+                    <th class="col-xs-2">
+                        Date
+                    </th>
+                    <th class="col-xs-3">
+                        User
+                    </th>
+                    <th class="col-xs-3">
+                        Problem
+                    </th>
+                    <th class="col-xs-2">
+                        Result
+                    </th>
+                    <th class="col-xs-2">
+                        Score
+                    </th>
+                </tr>
+                <?php
+                while($row = mysqli_fetch_assoc($result)){
+                    $status = $row['status'];
+                    if($status == "PEND"){
+                        $status = "Pending";
+                    }else if($status == "PROG"){
+                        $status = "Judging";
+                    }
+                    echo "<tr>";
+                    echo "<td>". $row['SubmissionDate']. "</td>";
+                    echo "<td>". $row['Username']. "</td>";
+                    echo "<td><a href=\"?problem=". $row['ProblemCode']. "\">". $row['ProblemName']. "</a></td>";
+                    echo "<td>". $status. "</td>";
+                    echo "<td>". $row['PointsEarnt']. "</td>";
+                    echo "</tr>";
+                }
+                ?>
+            </table>
+            <?php
+            }else if($page == 3){
                 if($error != null){
                     echo "<div class=\"alert alert-danger\" role=\"alert\">". $error. "</div>";
                 }
