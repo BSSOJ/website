@@ -2,6 +2,10 @@
 session_start();
 require_once("config.php");
 
+if(!isset($_GET['login'])){
+    require_once("auth.php");
+}
+
 $error = isset($_SESSION['error']) ? $_SESSION['error'] : null;
 
 $page = 0;
@@ -189,6 +193,7 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                 if($error != null){
                     echo "<div class=\"alert alert-danger\" role=\"alert\">". $error. "</div>";
                 }
+                if(!isset($_SESSION['totpuser'])){
             ?>
             <form action="login.php" method="POST">
                 <div class="form-group">
@@ -204,9 +209,20 @@ $link = mysqli_connect($config['db']['addr'], $config['db']['user'], $config['db
                         <input type="checkbox"> Remember me
                     </label>
                 </div>
-                <button type="submit" class="btn btn-default">Submit</button>
+                <button type="submit" class="btn btn-primary">Login</button>
             </form>
             <?php
+                }else{
+            ?>
+            <form action="login.php" method="POST">
+                <div class="form-group">
+                    <label for="exampleInputEmail1">Two-step verification code</label>
+                    <input type="text" class="form-control" name="code" placeholder="Two-step veification code" required>
+                </div>
+                <button type="submit" class="btn btn-primary">Login</button>
+            </form>
+            <?php
+                }
             }else if($page == 0){
             ?>
             <table class="table">
